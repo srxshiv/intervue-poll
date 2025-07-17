@@ -1,12 +1,18 @@
 import express from 'express';
-import http from 'http';
+import https from 'https';
+import fs from 'fs';
 import {Server} from 'socket.io';
 import cors from 'cors';
 import { v4 as uuidv4 } from 'uuid';
 
 
 const app = express();
-const server = http.createServer(app);
+const options = {
+  key: fs.readFileSync('./server/key.pem'),
+  cert: fs.readFileSync('./server/cert.pem')
+};
+const server = https.createServer(options, app);
+
 const io = new Server(server, {
   cors: {
     origin: "*",
